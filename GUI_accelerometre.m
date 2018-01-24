@@ -631,13 +631,20 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 matriceDonneesCSV = zeros(longueur,8);
 
 matriceDonneesCSV(:,1) = handles.structDataUtilisateur.id;
-%matriceDonneesCSV(:,2) = handles.structDataUtilisateur.temps;
+
+% Transfert des donnees de cell array a double
+matriceCar = cell2mat(handles.structDataUtilisateur.horodatage);
+assignin('base','matriceCar',matriceCar);
+
+matriceDonneesCSV(:,2) = str2num(matriceCar);
 matriceDonneesCSV(:,3) = handles.structDataUtilisateur.accX;
 matriceDonneesCSV(:,4) = handles.structDataUtilisateur.accY;
 matriceDonneesCSV(:,5) = handles.structDataUtilisateur.accZ;
 matriceDonneesCSV(:,6) = handles.structDataUtilisateur.gyroX;
 matriceDonneesCSV(:,7) = handles.structDataUtilisateur.gyroY;
 matriceDonneesCSV(:,8) = handles.structDataUtilisateur.gyroZ;
+
+assignin('base','matriceDonneesCSV',matriceDonneesCSV);
 
 numeroDataMinVoulu = str2double(get(handles.edit6,'String'));
 numeroDataMaxVoulu = str2double(get(handles.edit7,'String'));
@@ -668,4 +675,5 @@ nomDossierFichier = strcat('Data/',nomFichier);
 
 % Envoi .csv
 
-csvwrite(nomDossierFichier,matriceDonneesCSV);
+%csvwrite(nomDossierFichier,matriceDonneesCSV);
+dlmwrite(nomDossierFichier, matriceDonneesCSV, 'delimiter', ',', 'precision', 14); 
